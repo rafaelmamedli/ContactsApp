@@ -17,6 +17,7 @@ class ContactsViewModel @Inject constructor(private val repo: ContactsRepository
 
 
     fun getList(): MutableLiveData<List<Contacts>?> {
+        repo.getAllResults()
        return repo.contactsList
 
     }
