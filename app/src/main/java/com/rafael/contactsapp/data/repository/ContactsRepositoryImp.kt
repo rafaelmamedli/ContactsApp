@@ -15,7 +15,7 @@ class ContactsRepositoryImp
 
     var contactsList : MutableLiveData<List<Contacts>?> = MutableLiveData()
 
-    override fun getAllResults(): LiveData<List<ContactsAnswer>> {
+    override suspend fun getAllResults(): LiveData<List<ContactsAnswer>> {
         val resultLiveData = MutableLiveData<List<ContactsAnswer>>()
 
         apiService.getAllContacts().enqueue(object : Callback<ContactsAnswer> {
