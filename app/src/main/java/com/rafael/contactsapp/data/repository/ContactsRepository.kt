@@ -5,6 +5,6 @@ import com.rafael.contactsapp.data.model.ContactsAnswer
 
 interface ContactsRepository {
 
-  suspend  fun getAllResults(): LiveData<List<ContactsAnswer>>
+    fun getAllResults(): LiveData<List<ContactsAnswer>>
 
 }

@@ -30,16 +30,17 @@ class ContactsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        contactList?.let {
             adapter = ContactsAdapter(contactList)
-        }
+          //  viewModel.getContactResults()
+
+
 
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentContactsBinding.inflate(layoutInflater)
         return binding.root
@@ -54,7 +55,7 @@ class ContactsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
 
-        viewModel.getList().observe(viewLifecycleOwner) {
+        viewModel.getLiveData().observe(viewLifecycleOwner) {
             Log.d("TAG", it?.get(2)!!.contact_name)
             contactList.addAll(it)
             adapter.list = contactList

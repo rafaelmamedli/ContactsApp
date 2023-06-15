@@ -9,20 +9,23 @@ import com.rafael.contactsapp.data.model.ContactsAnswer
 import com.rafael.contactsapp.data.repository.ContactsRepository
 import com.rafael.contactsapp.data.repository.ContactsRepositoryImp
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ContactsViewModel @Inject constructor(private val repo: ContactsRepositoryImp):ViewModel() {
+class ContactsViewModel @Inject constructor(private val repo: ContactsRepositoryImp) : ViewModel() {
 
 
 
+    init {
+        getContactResults()
+    }
+    fun getLiveData(): MutableLiveData<List<Contacts>?> {
+        return repo.contactsList
+    }
 
-    fun getList(): MutableLiveData<List<Contacts>?> {
-
-        viewModelScope.launch {
+     fun getContactResults(){
             repo.getAllResults()
-        }
-       return repo.contactsList
-
-}}
+    }
+}
