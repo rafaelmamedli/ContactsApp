@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rafael.contactsapp.data.model.Contacts
 import com.rafael.contactsapp.databinding.RowRecyclerviewContactBinding
 
-class ContactsAdapter(var list: ArrayList<Contacts>):RecyclerView.Adapter<ContactsAdapter.ProductViewHolder>() {
+class ContactsAdapter(var list: MutableList<Contacts>):RecyclerView.Adapter<ContactsAdapter.ProductViewHolder>() {
 
 
     inner class ProductViewHolder (private val binding: RowRecyclerviewContactBinding): RecyclerView.ViewHolder(binding.root){
@@ -16,7 +16,6 @@ class ContactsAdapter(var list: ArrayList<Contacts>):RecyclerView.Adapter<Contac
         fun bind(item: Contacts){
             binding.apply {
                 contactDetailTv.text = "${item.contact_name}  ${item.contact_number}"
-
             }
 
         }

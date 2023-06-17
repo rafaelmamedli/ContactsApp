@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rafael.contactsapp.R
 import com.rafael.contactsapp.data.model.Contacts
+import com.rafael.contactsapp.data.util.UiState
 import com.rafael.contactsapp.databinding.FragmentContactsBinding
 import com.rafael.contactsapp.view.adapter.ContactsAdapter
 import com.rafael.contactsapp.viewmodel.ContactsViewModel
@@ -50,19 +51,28 @@ class ContactsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
 
-        viewModel.getLiveData().observe(viewLifecycleOwner) {
-            Log.d("TAG", it?.get(2)!!.contact_name)
-            contactList.addAll(it)
-            adapter.list = contactList
-            adapter.notifyDataSetChanged()
+        viewModel.getContacts.observe(viewLifecycleOwner) {state ->
+            when(state) {
+                is UiState.Loading -> {
+                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+
+                }
+                is UiState.Success -> {
+                  val contactList =  state.data.toMutableList()
+                    adapter.list = contactList
+                    adapter.notifyDataSetChanged()
+                }
+                is UiState.Failure -> {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
+                }
+            }
         }
-    }
 
 
 
-}
+}}
