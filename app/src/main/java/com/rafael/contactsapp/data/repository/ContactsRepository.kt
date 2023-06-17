@@ -6,5 +6,7 @@ import com.rafael.contactsapp.data.model.ContactsAnswer
 import com.rafael.contactsapp.data.util.UiState
 
 interface ContactsRepository {
-     fun getAllResults(result: (UiState<List<Contacts>>) -> Unit)
+    suspend fun getAllResults(result: (UiState<List<Contacts>>) -> Unit)
+    suspend fun deleteContact(contact_id :Int, result: (UiState<List<Contacts>>) -> Unit)
+
 }

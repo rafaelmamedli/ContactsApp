@@ -16,6 +16,7 @@ import javax.inject.Inject
 class ContactsViewModel @Inject constructor(private val repo: ContactsRepositoryImp) : ViewModel() {
 
     private val _getcontacts = MutableLiveData<UiState<List<Contacts>>>()
+    val _deleteContact = MutableLiveData<UiState<List<Contacts>>>()
 
 
 
@@ -26,12 +27,22 @@ class ContactsViewModel @Inject constructor(private val repo: ContactsRepository
     val getContacts: LiveData<UiState<List<Contacts>>>
         get() = _getcontacts
 
+    val deleteContact: LiveData<UiState<List<Contacts>>>
+        get() = _deleteContact
 
 
-    fun getContacts() = viewModelScope.launch(Dispatchers.Main) {
+
+    fun getContacts() = viewModelScope.launch {
         _getcontacts.value = UiState.Loading
         repo.getAllResults() { result ->
             _getcontacts.value = result }
+    }
 
+    fun deleteContact(contact_id: Int) = viewModelScope.launch{
+        _deleteContact.value = UiState.Loading
+        repo.deleteContact(contact_id) { result ->
+            _deleteContact.value = result
+
+        }
     }
 }
