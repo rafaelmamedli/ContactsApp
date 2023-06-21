@@ -8,12 +8,7 @@ import com.rafael.contactsapp.databinding.RowRecyclerviewContactBinding
 
 class ContactsAdapter(var list: MutableList<Contacts>):RecyclerView.Adapter<ContactsAdapter.ProductViewHolder>() {
 
-    var itemListener: ((Contacts) -> Unit)? = null
-
     inner class ProductViewHolder (private val binding: RowRecyclerviewContactBinding): RecyclerView.ViewHolder(binding.root){
-
-
-
         fun bind(item: Contacts){
             binding.apply {
                 contactDetailTv.text = "${item.contact_name}  ${item.contact_number}"

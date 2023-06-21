@@ -15,30 +15,26 @@ import javax.inject.Inject
 @HiltViewModel
 class ContactsViewModel @Inject constructor(private val repo: ContactsRepositoryImp) : ViewModel() {
 
-    private val _getcontacts = MutableLiveData<UiState<List<Contacts>>>()
-    val _deleteContact = MutableLiveData<UiState<List<Contacts>>>()
-
-
-
 
     init {
         getContacts()
     }
+
+    private val _getContacts = MutableLiveData<UiState<List<Contacts>>>()
+    private val _deleteContact = MutableLiveData<UiState<List<Contacts>>>()
+
+
     val getContacts: LiveData<UiState<List<Contacts>>>
-        get() = _getcontacts
-
-    val deleteContact: LiveData<UiState<List<Contacts>>>
-        get() = _deleteContact
+        get() = _getContacts
 
 
-
-    fun getContacts() = viewModelScope.launch {
-        _getcontacts.value = UiState.Loading
+    private fun getContacts() = viewModelScope.launch(Dispatchers.Main) {
+        _getContacts.value = UiState.Loading
         repo.getAllResults() { result ->
-            _getcontacts.value = result }
+            _getContacts.value = result }
     }
 
-    fun deleteContact(contact_id: Int) = viewModelScope.launch{
+    fun deleteContact(contact_id: Int) = viewModelScope.launch(Dispatchers.Main){
         _deleteContact.value = UiState.Loading
         repo.deleteContact(contact_id) { result ->
             _deleteContact.value = result

@@ -17,4 +17,8 @@ interface ApiService
     @FormUrlEncoded
     fun deleteContact(@Field("kisi_id") contact_id: Int) : Call<Answer>
 
+    @POST("kisiler/insert_kisiler.php")
+    @FormUrlEncoded
+    fun addContact(@Field("kisi_ad") contact_name:String,@Field("kisi_tel") contact_number:String) :Call<Answer>
+
 }
