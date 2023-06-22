@@ -25,7 +25,7 @@ class ContactsRepositoryImp
                 response: Response<ContactsAnswer>
             ) {
 
-             val   list = response.body()?.contacts as MutableList<Contacts>
+             val list = response.body()?.contacts as MutableList<Contacts>
                 Log.d(SUCCESS,list.toString())
                 result.invoke(
                     UiState.Success(list)
@@ -44,6 +44,25 @@ class ContactsRepositoryImp
                 val success = response.body()!!.success
                 val message = response.body()!!.message
                 Log.d(SUCCESS,"$success  $message")
+            }
+
+            override fun onFailure(call: Call<Answer>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    override suspend fun addContact(
+        contact_name: String,
+        contact_number: String,
+        result: (UiState<List<Contacts>>) -> Unit
+    ) {
+        apiService.addContact(contact_name, contact_number).enqueue(object :Callback<Answer>{
+            override fun onResponse(call: Call<Answer>, response: Response<Answer>) {
+                val success = response.body()!!.success
+                val message = response.body()!!.message
+
             }
 
             override fun onFailure(call: Call<Answer>, t: Throwable) {

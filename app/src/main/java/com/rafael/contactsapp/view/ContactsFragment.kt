@@ -59,6 +59,7 @@ class ContactsFragment : Fragment() {
             )
         }
 
+
         observer()
         setupSwipeToDelete()
     }
