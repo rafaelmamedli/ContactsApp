@@ -59,10 +59,20 @@ class ContactsFragment : Fragment() {
             )
         }
 
+        viewModel.getContacts()
+        adapter.setItemClickListener {
+            findNavController().navigate(
+                R.id.action_contactsFragment_to_contactDetailFragment,Bundle().apply {
+                    putString("type","view")
+                    putParcelable("contact", it)
 
+                }
+            )
+        }
         observer()
         setupSwipeToDelete()
     }
+
 
     private fun observer() {
         viewModel.getContacts.observe(viewLifecycleOwner) { state ->
@@ -70,11 +80,13 @@ class ContactsFragment : Fragment() {
                 is UiState.Loading -> {
                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                 }
+
                 is UiState.Success -> {
                     contactList.clear()
                     contactList.addAll(state.data)
                     adapter.notifyDataSetChanged()
                 }
+
                 is UiState.Failure -> {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
@@ -90,6 +102,7 @@ class ContactsFragment : Fragment() {
                 contactList.remove(item)
                 adapter.notifyItemRemoved(position)
                 viewModel.deleteContact(item.contact_id)
+
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteBack)

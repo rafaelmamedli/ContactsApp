@@ -44,6 +44,8 @@ class ContactsRepositoryImp
                 val success = response.body()!!.success
                 val message = response.body()!!.message
                 Log.d(SUCCESS,"$success  $message")
+
+
             }
 
             override fun onFailure(call: Call<Answer>, t: Throwable) {
@@ -56,13 +58,13 @@ class ContactsRepositoryImp
     override suspend fun addContact(
         contact_name: String,
         contact_number: String,
-        result: (UiState<List<Contacts>>) -> Unit
+        result: (UiState<String>) -> Unit
     ) {
         apiService.addContact(contact_name, contact_number).enqueue(object :Callback<Answer>{
             override fun onResponse(call: Call<Answer>, response: Response<Answer>) {
                 val success = response.body()!!.success
                 val message = response.body()!!.message
-
+                result.invoke(UiState.Success("Contact added"))
             }
 
             override fun onFailure(call: Call<Answer>, t: Throwable) {

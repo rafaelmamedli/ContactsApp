@@ -17,7 +17,6 @@ class ContactsViewModel @Inject constructor(private val repo: ContactsRepository
 
 
     init {
-        getContacts()
     }
 
     private val _getContacts = MutableLiveData<UiState<List<Contacts>>>()
@@ -28,7 +27,7 @@ class ContactsViewModel @Inject constructor(private val repo: ContactsRepository
         get() = _getContacts
 
 
-    private fun getContacts() = viewModelScope.launch(Dispatchers.Main) {
+    fun getContacts() = viewModelScope.launch(Dispatchers.Main) {
         _getContacts.value = UiState.Loading
         repo.getAllResults() { result ->
             _getContacts.value = result }
@@ -40,5 +39,6 @@ class ContactsViewModel @Inject constructor(private val repo: ContactsRepository
             _deleteContact.value = result
 
         }
+        getContacts()
     }
 }

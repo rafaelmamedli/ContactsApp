@@ -18,9 +18,9 @@ import javax.inject.Inject
 class ContactDetailViewModel @Inject constructor(private val repo: ContactsRepositoryImp) :ViewModel() {
 
 
-    private val _addContacts = MutableLiveData<UiState<List<Contacts>>>()
+    private val _addContacts = MutableLiveData<UiState<String>>()
 
-    val addContacts: LiveData<UiState<List<Contacts>>>
+    val addContacts: LiveData<UiState<String>>
         get() = _addContacts
 
     fun addContact(contact_name: String,contact_number:String) = viewModelScope.launch(Dispatchers.Main){

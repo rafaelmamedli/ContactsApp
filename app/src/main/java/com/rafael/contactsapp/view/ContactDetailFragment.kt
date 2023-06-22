@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rafael.contactsapp.R
+import com.rafael.contactsapp.data.model.Contacts
 import com.rafael.contactsapp.data.util.Tags.TAG
 import com.rafael.contactsapp.data.util.UiState
 import com.rafael.contactsapp.data.util.goTo
+import com.rafael.contactsapp.data.util.gone
+import com.rafael.contactsapp.data.util.show
 import com.rafael.contactsapp.data.util.toast
 import com.rafael.contactsapp.databinding.FragmentContactDetailBinding
 import com.rafael.contactsapp.viewmodel.ContactDetailViewModel
@@ -23,6 +26,7 @@ class ContactDetailFragment : Fragment() {
 
     private val viewModel: ContactDetailViewModel by viewModels()
     private lateinit var binding: FragmentContactDetailBinding
+    var contactValue : Contacts? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,22 +47,30 @@ class ContactDetailFragment : Fragment() {
             observer()
             val value1=binding.editTextName.text.toString()
             val value2=binding.editTextNumber.text.toString()
-            viewModel.addContact(value1,value2)
-            findNavController().navigate(R.id.action_contactDetailFragment_to_contactsFragment)
+
+
+            if (value2.isNotEmpty() && value1.isNotEmpty()) {
+                viewModel.addContact(value1,value2)
+
+            }
 
         }
 
-    }
+        updateUi()
 
-    private fun observer(){
+
         viewModel.addContacts.observe(viewLifecycleOwner){ state ->
             when(state){
-                is UiState.Success ->{
-                    Log.e(TAG, state.data.toString())
+
+                is UiState.Loading ->{
+                    binding.progressBar.show()
+                    binding.button.text = ""
 
                 }
-                is UiState.Loading ->{
-                    Log.e(TAG, "state.data.toString()")
+                is UiState.Success ->{
+                    toast(state.data)
+                    binding.progressBar.gone()
+                    binding.button.text = "Complete"
 
                 }
                 is UiState.Failure ->{
@@ -68,6 +80,36 @@ class ContactDetailFragment : Fragment() {
             }
 
         }
+
+    }
+
+    private fun updateUi(){
+        val type =  arguments?.getString("type",null)
+        type?.let {
+            when(it){
+                "create" ->{
+
+                }
+                "view" -> {
+                    binding.apply {
+                        button.gone()
+                        progressBar.gone()
+                        editTextName.isEnabled = false
+                        editTextNumber.isEnabled = false
+                        contactValue = arguments?.getParcelable<Contacts>("contact")
+                        editTextNumber.setText(contactValue?.contact_number)
+                        editTextName.setText(contactValue?.contact_name)
+
+                    }
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    private fun observer(){
+
     }
 
 
