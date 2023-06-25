@@ -24,55 +24,64 @@ class ContactsRepositoryImp
                 call: Call<ContactsAnswer>,
                 response: Response<ContactsAnswer>
             ) {
-
-             val list = response.body()?.contacts as MutableList<Contacts>
-                Log.d(SUCCESS,list.toString())
-                result.invoke(
-                    UiState.Success(list)
-                )
+                val contactsAnswer = response.body()
+                if (response.isSuccessful && contactsAnswer != null) {
+                    val list = contactsAnswer.contacts
+                //    Log.d(SUCCESS, list.toString())
+                    result.invoke(UiState.Success(list))
+                } else {
+                    result.invoke(UiState.Failure("Failed to get contacts"))
+                }
             }
-            override fun onFailure(call: Call<ContactsAnswer>, t: Throwable) {
-                Log.d(SUCCESS,"Error")
 
+            override fun onFailure(call: Call<ContactsAnswer>, t: Throwable) {
+                result.invoke(UiState.Failure(t.message))
             }
         })
     }
 
+
     override suspend fun deleteContact(contact_id: Int, result: (UiState<List<Contacts>>) -> Unit) {
-        apiService.deleteContact(contact_id).enqueue(object : Callback<Answer>{
+        apiService.deleteContact(contact_id).enqueue(object : Callback<Answer> {
             override fun onResponse(call: Call<Answer>, response: Response<Answer>) {
-                val success = response.body()!!.success
-                val message = response.body()!!.message
-                Log.d(SUCCESS,"$success  $message")
-
-
+                if (response.isSuccessful) {
+                    val success = response.body()?.success ?: 0
+                    val message = response.body()?.message
+                    Log.d(SUCCESS, "$success  $message")
+                } else {
+                    result.invoke(UiState.Failure("Failed to delete contact"))
+                }
             }
 
             override fun onFailure(call: Call<Answer>, t: Throwable) {
-                TODO("Not yet implemented")
+                result.invoke(UiState.Failure(t.message))
             }
-
         })
     }
+
 
     override suspend fun addContact(
         contact_name: String,
         contact_number: String,
         result: (UiState<String>) -> Unit
     ) {
-        apiService.addContact(contact_name, contact_number).enqueue(object :Callback<Answer>{
+        apiService.addContact(contact_name, contact_number).enqueue(object : Callback<Answer> {
             override fun onResponse(call: Call<Answer>, response: Response<Answer>) {
-                val success = response.body()!!.success
-                val message = response.body()!!.message
-                result.invoke(UiState.Success("Contact added"))
+                if (response.isSuccessful) {
+                    val success = response.body()?.success ?: 0
+                    val message = response.body()?.message
+                    result.invoke(UiState.Success("Contact added"))
+                } else {
+                    result.invoke(UiState.Failure("Failed to add contact"))
+                }
             }
 
             override fun onFailure(call: Call<Answer>, t: Throwable) {
-                TODO("Not yet implemented")
+                result.invoke(UiState.Failure(t.message))
             }
-
         })
     }
+
 
 
 }

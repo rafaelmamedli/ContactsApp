@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rafael.contactsapp.R
 import com.rafael.contactsapp.data.model.Contacts
 import com.rafael.contactsapp.data.util.UiState
-import com.rafael.contactsapp.data.util.goTo
-import com.rafael.contactsapp.data.util.toast
 import com.rafael.contactsapp.databinding.FragmentContactsBinding
 import com.rafael.contactsapp.view.adapter.ContactsAdapter
 import com.rafael.contactsapp.view.adapter.SwipeDeleteCallBack
@@ -33,7 +30,10 @@ class ContactsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = ContactsAdapter(contactList)
+        contactList?.let {
+            adapter = ContactsAdapter(it)
+
+        }
     }
 
     override fun onCreateView(
@@ -83,7 +83,9 @@ class ContactsFragment : Fragment() {
 
                 is UiState.Success -> {
                     contactList.clear()
-                    contactList.addAll(state.data)
+                    state.data?.let {
+                        contactList.addAll(it)
+                    }
                     adapter.notifyDataSetChanged()
                 }
 

@@ -30,7 +30,7 @@ class ContactsViewModel @Inject constructor(private val repo: ContactsRepository
     fun getContacts() = viewModelScope.launch(Dispatchers.Main) {
         _getContacts.value = UiState.Loading
         repo.getAllResults() { result ->
-            _getContacts.value = result }
+                _getContacts.value = result }
     }
 
     fun deleteContact(contact_id: Int) = viewModelScope.launch(Dispatchers.Main){
