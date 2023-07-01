@@ -1,6 +1,7 @@
 package com.rafael.contactsapp.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rafael.contactsapp.R
 import com.rafael.contactsapp.data.model.Contacts
+import com.rafael.contactsapp.data.util.Tags.TAG
 import com.rafael.contactsapp.data.util.UiState
 import com.rafael.contactsapp.databinding.FragmentContactsBinding
 import com.rafael.contactsapp.view.adapter.ContactsAdapter
@@ -78,14 +80,12 @@ class ContactsFragment : Fragment() {
         viewModel.getContacts.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG,"Loading")
                 }
 
                 is UiState.Success -> {
                     contactList.clear()
-                    state.data?.let {
-                        contactList.addAll(it)
-                    }
+                    state.data?.let { contactList.addAll(it) }
                     adapter.notifyDataSetChanged()
                 }
 

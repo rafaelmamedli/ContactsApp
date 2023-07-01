@@ -30,20 +30,14 @@ class ContactDetailFragment : Fragment() {
     ): View {
         binding = FragmentContactDetailBinding.inflate(layoutInflater)
         return binding.root
-
-
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         observer()
         updateUi()
         addContact()
-
 
     }
 
@@ -61,8 +55,6 @@ class ContactDetailFragment : Fragment() {
                         editTextNumber.setText(contactValue?.contact_number)
                         editTextName.setText(contactValue?.contact_name)
                     }
-
-
             }
         }
     }

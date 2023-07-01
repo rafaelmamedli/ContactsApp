@@ -1,13 +1,11 @@
 package com.rafael.contactsapp.data.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.rafael.contactsapp.data.model.Answer
 import com.rafael.contactsapp.data.model.Contacts
 import com.rafael.contactsapp.data.model.ContactsAnswer
 import com.rafael.contactsapp.data.retrofit.ApiService
-import com.rafael.contactsapp.data.util.Tags.SUCCESS
+import com.rafael.contactsapp.data.util.Tags.TAG
 import com.rafael.contactsapp.data.util.UiState
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.Call
@@ -47,7 +45,7 @@ class ContactsRepositoryImp
                     if (response.isSuccessful) {
                         val success = response.body()?.success ?: 0
                         val message = response.body()?.message
-                        Log.d(SUCCESS, "$success  $message")
+                        Log.d(TAG, "$success  $message")
                         emitter.onNext(UiState.Success(emptyList()))
                     } else {
                         emitter.onNext(UiState.Failure("Failed to delete contact"))
