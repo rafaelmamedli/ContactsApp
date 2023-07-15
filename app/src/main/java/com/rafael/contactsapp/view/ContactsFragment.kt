@@ -61,7 +61,7 @@ class ContactsFragment : Fragment() {
             )
         }
 
-        viewModel.getContacts()
+        viewModel.fetchContacts()
         adapter.setItemClickListener {
             findNavController().navigate(
                 R.id.action_contactsFragment_to_contactDetailFragment,Bundle().apply {

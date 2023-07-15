@@ -22,7 +22,7 @@ class ContactDetailFragment : Fragment() {
 
     private val viewModel: ContactDetailViewModel by viewModels()
     private lateinit var binding: FragmentContactDetailBinding
-    var contactValue : Contacts? = null
+    var contactValue: Contacts? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,37 +41,39 @@ class ContactDetailFragment : Fragment() {
 
     }
 
-    private fun updateUi(){
-        val type =  arguments?.getString("type",null)
+    private fun updateUi() {
+        val type = arguments?.getString("type", null)
         type?.let {
-            if(it == "view"){
+            if (it == "view") {
 
-                    binding.apply {
-                        button.gone()
-                        progressBar.gone()
-                        editTextName.isEnabled = false
-                        editTextNumber.isEnabled = false
-                        contactValue = arguments?.getParcelable<Contacts>("contact")
-                        editTextNumber.setText(contactValue?.contact_number)
-                        editTextName.setText(contactValue?.contact_name)
-                    }
+                binding.apply {
+                    button.gone()
+                    progressBar.gone()
+                    editTextName.isEnabled = false
+                    editTextNumber.isEnabled = false
+                    contactValue = arguments?.getParcelable<Contacts>("contact")
+                    editTextNumber.setText(contactValue?.contact_number)
+                    editTextName.setText(contactValue?.contact_name)
+                }
             }
         }
     }
 
-    private fun observer(){
-        viewModel.addContacts.observe(viewLifecycleOwner){ state ->
-            when(state){
-                is UiState.Loading ->{
+    private fun observer() {
+        viewModel.addContacts.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
                     binding.progressBar.show()
                     binding.button.text = ""
                 }
-                is UiState.Success ->{
-                    toast(state.data)
+
+                is UiState.Success -> {
+                    toast(state.data.message)
                     binding.progressBar.gone()
                     binding.button.text = "Create"
                 }
-                is UiState.Failure ->{
+
+                is UiState.Failure -> {
                     Log.e(TAG, "Error")
                 }
             }
@@ -79,18 +81,15 @@ class ContactDetailFragment : Fragment() {
         }
     }
 
-    private fun addContact(){
+    private fun addContact() {
         binding.button.setOnClickListener {
-            val name=binding.editTextName.text.toString()
-            val number=binding.editTextNumber.text.toString()
+            val name = binding.editTextName.text.toString()
+            val number = binding.editTextNumber.text.toString()
             if (number.isNotEmpty() && name.isNotEmpty()) {
-                viewModel.addContact(name,number)
+                viewModel.addContact(name, number)
             }
         }
     }
-
-
-
 
 
 }
